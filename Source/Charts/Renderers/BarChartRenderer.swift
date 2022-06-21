@@ -378,8 +378,14 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 // Set the color for the currently drawn value. If the index is out of bounds, reuse colors.
                 context.setFillColor(dataSet.color(atIndex: j).cgColor)
             }
-            
-            context.fill(barRect)
+
+            //*********** START OF SPECTRA CUSTOMIZATIONS ************//
+            let bezierPath = UIBezierPath(roundedRect: barRect, cornerRadius: 16)
+            context.addPath(bezierPath.cgPath)
+
+            context.drawPath(using: .fill)
+
+            //*********** END OF SPECTRA CUSTOMIZATIONS ************//
             
             if drawBorder
             {
@@ -743,8 +749,15 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: barData.barWidth / 2.0, trans: trans, rect: &barRect)
                 
                 setHighlightDrawPos(highlight: high, barRect: barRect)
-                
-                context.fill(barRect)
+
+                //*********** START OF SPECTRA CUSTOMIZATIONS ************//
+
+                let bezierPath = UIBezierPath(roundedRect: barRect, cornerRadius: 16)
+                context.addPath(bezierPath.cgPath)
+
+                context.drawPath(using: .fill)
+
+                //*********** END OF SPECTRA CUSTOMIZATIONS ************//
             }
         }
     }

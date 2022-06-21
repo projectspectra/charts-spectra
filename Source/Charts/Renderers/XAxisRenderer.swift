@@ -11,7 +11,9 @@
 
 import Foundation
 import CoreGraphics
-
+//*********** START OF SPECTRA CUSTOMIZATIONS ************//
+import UIKit
+//*********** END OF SPECTRA CUSTOMIZATIONS ************//
 
 @objc(ChartXAxisRenderer)
 open class XAxisRenderer: NSObject, AxisRenderer
@@ -19,6 +21,10 @@ open class XAxisRenderer: NSObject, AxisRenderer
     @objc public let viewPortHandler: ViewPortHandler
     @objc public let axis: XAxis
     @objc public let transformer: Transformer?
+
+    //*********** START OF SPECTRA CUSTOMIZATIONS ************//
+    public static let higihlightedLabelMarker: String = ".spectra.highlighted"
+    //*********** END OF SPECTRA CUSTOMIZATIONS ************//
 
     @objc public init(viewPortHandler: ViewPortHandler, axis: XAxis, transformer: Transformer?)
     {
@@ -252,7 +258,7 @@ open class XAxisRenderer: NSObject, AxisRenderer
         let paraStyle = ParagraphStyle.default.mutableCopy() as! MutableParagraphStyle
         paraStyle.alignment = .center
         
-        let labelAttrs: [NSAttributedString.Key : Any] = [.font: axis.labelFont,
+        var labelAttrs: [NSAttributedString.Key : Any] = [.font: axis.labelFont,
                                                          .foregroundColor: axis.labelTextColor,
                                                          .paragraphStyle: paraStyle]
 
@@ -300,15 +306,41 @@ open class XAxisRenderer: NSObject, AxisRenderer
                     position.x += width / 2.0
                 }
             }
-            
+
+            //*********** START OF SPECTRA CUSTOMIZATIONS ************//
+
+            let shadow = NSShadow()
+            shadow.shadowColor = UIColor.black.withAlphaComponent(0.6)
+            shadow.shadowBlurRadius = 5
+
+            if label.contains(XAxisRenderer.higihlightedLabelMarker) {
+                labelAttrs[.font] = axis.highlightedLabelFont
+                labelAttrs[.foregroundColor] = axis.highlightedLabelTextColor
+                labelAttrs[.underlineStyle] = 1
+                labelAttrs[.shadow] = shadow
+            } else {
+                labelAttrs[.font] = axis.labelFont
+                labelAttrs[.foregroundColor] = axis.labelTextColor
+                labelAttrs[.underlineStyle] = 0
+                labelAttrs[.shadow] = nil
+            }
+
+            var currentLabel: String = label
+
+            if label.contains(XAxisRenderer.higihlightedLabelMarker) {
+                currentLabel.removeLast(XAxisRenderer.higihlightedLabelMarker.count)
+            }
+
             drawLabel(context: context,
-                      formattedLabel: label,
+                      formattedLabel: currentLabel,
                       x: position.x,
                       y: pos,
                       attributes: labelAttrs,
                       constrainedTo: labelMaxSize,
                       anchor: anchor,
                       angleRadians: labelRotationAngleRadians)
+
+            //*********** END OF SPECTRA CUSTOMIZATIONS ************//
         }
     }
     

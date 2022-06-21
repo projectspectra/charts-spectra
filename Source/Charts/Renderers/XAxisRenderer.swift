@@ -23,7 +23,7 @@ open class XAxisRenderer: NSObject, AxisRenderer
     @objc public let transformer: Transformer?
 
     //*********** START OF SPECTRA CUSTOMIZATIONS ************//
-    public static let higihlightedLabelMarker: String = ".spectra.highlighted"
+    public static let highlightedLabelMarker: String = ".spectra.highlighted"
     //*********** END OF SPECTRA CUSTOMIZATIONS ************//
 
     @objc public init(viewPortHandler: ViewPortHandler, axis: XAxis, transformer: Transformer?)
@@ -313,7 +313,7 @@ open class XAxisRenderer: NSObject, AxisRenderer
             shadow.shadowColor = UIColor.black.withAlphaComponent(0.6)
             shadow.shadowBlurRadius = 5
 
-            if label.contains(XAxisRenderer.higihlightedLabelMarker) {
+            if label.contains(XAxisRenderer.highlightedLabelMarker) {
                 labelAttrs[.font] = axis.highlightedLabelFont
                 labelAttrs[.foregroundColor] = axis.highlightedLabelTextColor
                 labelAttrs[.underlineStyle] = 1
@@ -327,8 +327,8 @@ open class XAxisRenderer: NSObject, AxisRenderer
 
             var currentLabel: String = label
 
-            if label.contains(XAxisRenderer.higihlightedLabelMarker) {
-                currentLabel.removeLast(XAxisRenderer.higihlightedLabelMarker.count)
+            if label.contains(XAxisRenderer.highlightedLabelMarker) {
+                currentLabel.removeLast(XAxisRenderer.highlightedLabelMarker.count)
             }
 
             drawLabel(context: context,

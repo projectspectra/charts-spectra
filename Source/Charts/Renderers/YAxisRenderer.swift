@@ -412,13 +412,15 @@ open class YAxisRenderer: NSObject, AxisRenderer
             // no forced count
 
             var first = interval == 0.0 ? 0.0 : ceil(yMin / interval) * interval
+            first -= interval
 
             if axis.centerAxisLabelsEnabled
             {
                 first -= interval
             }
 
-            let last = interval == 0.0 ? 0.0 : (floor(yMax / interval) * interval).nextUp
+            var last = interval == 0.0 ? 0.0 : (floor(yMax / interval) * interval).nextUp
+            last += interval
 
             if interval != 0.0, last != first
             {

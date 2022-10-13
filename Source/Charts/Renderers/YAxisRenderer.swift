@@ -392,35 +392,12 @@ open class YAxisRenderer: NSObject, AxisRenderer
         }
 
         var n = axis.centerAxisLabelsEnabled ? 1 : 0
+        if axis.isCustom {
+            
+            // Spectra specific implementation
+            var first = yMin
 
-        // force label count
-        if axis.isForceLabelsEnabled
-        {
-            interval = Double(range) / Double(labelCount - 1)
-
-            // Ensure stops contains at least n elements.
-            axis.entries.removeAll(keepingCapacity: true)
-            axis.entries.reserveCapacity(labelCount)
-
-            let values = stride(from: yMin, to: Double(labelCount) * interval + yMin, by: interval)
-            axis.entries.append(contentsOf: values)
-
-            n = labelCount
-        }
-        else
-        {
-            // no forced count
-
-            var first = interval == 0.0 ? 0.0 : ceil(yMin / interval) * interval
-            first -= interval
-
-            if axis.centerAxisLabelsEnabled
-            {
-                first -= interval
-            }
-
-            var last = interval == 0.0 ? 0.0 : (floor(yMax / interval) * interval).nextUp
-            last += interval
+            let last = yMax
 
             if interval != 0.0, last != first
             {
@@ -434,7 +411,53 @@ open class YAxisRenderer: NSObject, AxisRenderer
             // Fix for IEEE negative zero case (Where value == -0.0, and 0.0 == -0.0)
             let values = stride(from: first, to: Double(n) * interval + first, by: interval).map { $0 == 0.0 ? 0.0 : $0 }
             axis.entries.append(contentsOf: values)
+        } else {
+            
+            // Default implementation
+            
+            // force label count
+            if axis.isForceLabelsEnabled
+            {
+                interval = Double(range) / Double(labelCount - 1)
+
+                // Ensure stops contains at least n elements.
+                axis.entries.removeAll(keepingCapacity: true)
+                axis.entries.reserveCapacity(labelCount)
+
+                let values = stride(from: yMin, to: Double(labelCount) * interval + yMin, by: interval)
+                axis.entries.append(contentsOf: values)
+
+                n = labelCount
+            }
+            else
+            {
+                // no forced count
+
+                var first = interval == 0.0 ? 0.0 : ceil(yMin / interval) * interval
+
+                if axis.centerAxisLabelsEnabled
+                {
+                    first -= interval
+                }
+
+                let last = interval == 0.0 ? 0.0 : (floor(yMax / interval) * interval).nextUp
+
+                if interval != 0.0, last != first
+                {
+                    stride(from: first, through: last, by: interval).forEach { _ in n += 1 }
+                }
+
+                // Ensure stops contains at least n elements.
+                axis.entries.removeAll(keepingCapacity: true)
+                axis.entries.reserveCapacity(labelCount)
+
+                // Fix for IEEE negative zero case (Where value == -0.0, and 0.0 == -0.0)
+                let values = stride(from: first, to: Double(n) * interval + first, by: interval).map { $0 == 0.0 ? 0.0 : $0 }
+                axis.entries.append(contentsOf: values)
+            }
         }
+
+
 
         // set decimals
         if interval < 1

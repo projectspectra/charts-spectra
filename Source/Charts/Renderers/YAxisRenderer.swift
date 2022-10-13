@@ -358,6 +358,39 @@ open class YAxisRenderer: NSObject, AxisRenderer
         let yMax = max
 
         let labelCount = axis.labelCount
+        var n = axis.centerAxisLabelsEnabled ? 1 : 0
+
+        if axis.isForcedInterval {
+            
+            // Forced intervals custom implementation
+            var first = yMin
+
+            let last = yMax
+
+            if axis.forcedInterval != 0.0, last != first
+            {
+                stride(from: first, through: last, by: axis.forcedInterval).forEach { _ in n += 1 }
+            }
+
+            // Ensure stops contains at least n elements.
+            axis.entries.removeAll(keepingCapacity: true)
+            axis.entries.reserveCapacity(labelCount)
+
+            // Fix for IEEE negative zero case (Where value == -0.0, and 0.0 == -0.0)
+            let values = stride(from: first, to: Double(n) * axis.forcedInterval + first, by: axis.forcedInterval).map { $0 == 0.0 ? 0.0 : $0 }
+            axis.entries.append(contentsOf: values)
+            
+            // set decimals
+            if axis.forcedInterval < 1
+            {
+                axis.decimals = Int(ceil(-log10(axis.forcedInterval)))
+            }
+            else
+            {
+                axis.decimals = 0
+            }
+            return
+        }
         let range = abs(yMax - yMin)
 
         guard
@@ -390,9 +423,7 @@ open class YAxisRenderer: NSObject, AxisRenderer
             // Use one order of magnitude higher, to avoid intervals like 0.9 or 90
             interval = floor(10.0 * Double(intervalMagnitude))
         }
-
-        var n = axis.centerAxisLabelsEnabled ? 1 : 0
-
+        
         // force label count
         if axis.isForceLabelsEnabled
         {

@@ -97,6 +97,14 @@ open class YAxis: AxisBase
     /// **default**: CGFloat.infinity
     @objc open var maxWidth = CGFloat(CGFloat.infinity)
     
+    /// Custom implementation where interval can be forced
+    @objc internal var isForcedInterval: Bool = false
+    @objc open var forcedInterval: Double = 0 {
+        didSet {
+            isForcedInterval = forcedInterval == 0 ? false : true
+        }
+    }
+    
     public override init()
     {
         super.init()

@@ -98,7 +98,12 @@ open class YAxis: AxisBase
     @objc open var maxWidth = CGFloat(CGFloat.infinity)
     
     /// Spectra custom implementation flag
-    @objc public var isCustom: Bool = false
+    @objc internal var isCustom: Bool = false
+    @objc open var forcedInterval: Double = 0 {
+        didSet {
+            isCustom = forcedInterval == 0 ? false : true
+        }
+    }
     
     public override init()
     {

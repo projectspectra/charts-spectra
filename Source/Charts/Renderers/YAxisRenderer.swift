@@ -379,6 +379,16 @@ open class YAxisRenderer: NSObject, AxisRenderer
             // Fix for IEEE negative zero case (Where value == -0.0, and 0.0 == -0.0)
             let values = stride(from: first, to: Double(n) * axis.forcedInterval + first, by: axis.forcedInterval).map { $0 == 0.0 ? 0.0 : $0 }
             axis.entries.append(contentsOf: values)
+            
+            // set decimals
+            if interval < 1
+            {
+                axis.decimals = Int(ceil(-log10(interval)))
+            }
+            else
+            {
+                axis.decimals = 0
+            }
             return
         }
         let range = abs(yMax - yMin)

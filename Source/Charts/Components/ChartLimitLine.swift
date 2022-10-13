@@ -68,7 +68,7 @@ open class ChartLimitLine: ComponentBase
         }
         set
         {
-            _lineWidth = newValue.clamped(to: 0.2...12)
+            _lineWidth = newValue
         }
     }
 }

@@ -97,11 +97,11 @@ open class YAxis: AxisBase
     /// **default**: CGFloat.infinity
     @objc open var maxWidth = CGFloat(CGFloat.infinity)
     
-    /// Spectra custom implementation flag
-    @objc internal var isCustom: Bool = false
+    /// Custom implementation where interval can be forced
+    @objc internal var isForcedInterval: Bool = false
     @objc open var forcedInterval: Double = 0 {
         didSet {
-            isCustom = forcedInterval == 0 ? false : true
+            isForcedInterval = forcedInterval == 0 ? false : true
         }
     }
     

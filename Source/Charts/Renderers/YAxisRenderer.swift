@@ -360,9 +360,9 @@ open class YAxisRenderer: NSObject, AxisRenderer
         let labelCount = axis.labelCount
         var n = axis.centerAxisLabelsEnabled ? 1 : 0
 
-        if axis.isCustom {
+        if axis.isForcedInterval {
             
-            // Spectra specific implementation
+            // Forced intervals custom implementation
             var first = yMin
 
             let last = yMax

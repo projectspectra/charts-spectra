@@ -367,9 +367,9 @@ open class YAxisRenderer: NSObject, AxisRenderer
 
             let last = yMax
 
-            if interval != 0.0, last != first
+            if axis.forcedInterval != 0.0, last != first
             {
-                stride(from: first, through: last, by: interval).forEach { _ in n += 1 }
+                stride(from: first, through: last, by: axis.forcedInterval).forEach { _ in n += 1 }
             }
 
             // Ensure stops contains at least n elements.
@@ -377,7 +377,7 @@ open class YAxisRenderer: NSObject, AxisRenderer
             axis.entries.reserveCapacity(labelCount)
 
             // Fix for IEEE negative zero case (Where value == -0.0, and 0.0 == -0.0)
-            let values = stride(from: first, to: Double(n) * axis.forcedInterval + first, by: interval).map { $0 == 0.0 ? 0.0 : $0 }
+            let values = stride(from: first, to: Double(n) * axis.forcedInterval + first, by: axis.forcedInterval).map { $0 == 0.0 ? 0.0 : $0 }
             axis.entries.append(contentsOf: values)
             return
         }

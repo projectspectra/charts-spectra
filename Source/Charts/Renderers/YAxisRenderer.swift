@@ -381,9 +381,9 @@ open class YAxisRenderer: NSObject, AxisRenderer
             axis.entries.append(contentsOf: values)
             
             // set decimals
-            if interval < 1
+            if axis.forcedInterval < 1
             {
-                axis.decimals = Int(ceil(-log10(interval)))
+                axis.decimals = Int(ceil(-log10(axis.forcedInterval)))
             }
             else
             {

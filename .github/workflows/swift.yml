@@ -11,6 +11,7 @@ on:
 jobs:
   iOS:
     runs-on: macos-12
+    timeout-minutes: 30
     env:
       DEVELOPER_DIR: /Applications/Xcode_14.0.app/Contents/Developer
     strategy:
@@ -23,6 +24,7 @@ jobs:
 
   tvOS:
     runs-on: macos-12
+    timeout-minutes: 30
     env:
       DEVELOPER_DIR: /Applications/Xcode_14.0.app/Contents/Developer
     strategy:
@@ -35,6 +37,7 @@ jobs:
 
   macOS_demo:
     runs-on: macos-12
+    timeout-minutes: 30
     env:
       DEVELOPER_DIR: /Applications/Xcode_14.0.app/Contents/Developer
     steps:
@@ -44,6 +47,7 @@ jobs:
 
   iOS_demo:
     runs-on: macos-12
+    timeout-minutes: 30
     env:
       DEVELOPER_DIR: /Applications/Xcode_14.0.app/Contents/Developer
     strategy:
@@ -57,6 +61,7 @@ jobs:
   spm:
     name: Test with SPM
     runs-on: macos-12
+    timeout-minutes: 30
     env:
       DEVELOPER_DIR: /Applications/Xcode_14.0.app/Contents/Developer
     steps:

@@ -382,11 +382,11 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             //*********** START OF SPECTRA CUSTOMIZATIONS ************//
 
             // Set corner radius if last or remaining elements for that bar have 0 height
-            let currentStackIndex = j % dataSet.stackSize
-            let endIndex = dataSet.stackSize - 1
+            let currentStackIndex = j % stackSize
+            let endIndex = stackSize - 1
             var restNoHeight = true
             var i = 1
-            while i + currentStackIndex < dataSet.stackSize && restNoHeight {
+            while i + currentStackIndex < stackSize && restNoHeight {
                 restNoHeight = buffer[j + i].height == 0
                 i += 1
             }

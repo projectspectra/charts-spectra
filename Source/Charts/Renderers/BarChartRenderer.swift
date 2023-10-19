@@ -380,10 +380,23 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             }
 
             //*********** START OF SPECTRA CUSTOMIZATIONS ************//
-            let bezierPath = UIBezierPath(roundedRect: barRect, cornerRadius: 16)
-            context.addPath(bezierPath.cgPath)
 
-            context.drawPath(using: .fill)
+            // Set corner radius if last or remaining elements for that bar have 0 height
+            let currentStackIndex = j % stackSize
+            let endIndex = stackSize - 1
+            var restNoHeight = true
+            var i = 1
+            while i + currentStackIndex < stackSize && restNoHeight {
+                restNoHeight = buffer[j + i].height == 0
+                i += 1
+            }
+            if currentStackIndex == endIndex || restNoHeight {
+                let bezierPath = UIBezierPath(roundedRect: barRect, byRoundingCorners:[.topRight, .topLeft], cornerRadii: CGSize(width: 5, height: 5))
+                context.addPath(bezierPath.cgPath)
+                context.drawPath(using: .fill)
+            } else {
+                context.fill(barRect)
+            }
 
             //*********** END OF SPECTRA CUSTOMIZATIONS ************//
             

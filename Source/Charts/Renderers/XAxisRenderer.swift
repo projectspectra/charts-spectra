@@ -114,14 +114,14 @@ open class XAxisRenderer: NSObject, AxisRenderer
         {
             // no forced count
 
-            var first = interval == 0.0 ? 0.0 : ceil(yMin / interval) * interval
+            var first = interval == 0.0 ? 0.0 : ceil(floor(yMin) / interval) * interval
 
             if axis.centerAxisLabelsEnabled
             {
                 first -= interval
             }
 
-            let last = interval == 0.0 ? 0.0 : (floor(yMax / interval) * interval).nextUp
+            let last = interval == 0.0 ? 0.0 : (floor(ceil(yMax) / interval) * interval).nextUp
 
             if interval != 0.0, last != first
             {
